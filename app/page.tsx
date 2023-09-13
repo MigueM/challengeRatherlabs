@@ -1,18 +1,25 @@
-import React from 'react'
-import { Button, Box } from '@mui/material'
+'use client'
+import './globals.css'
+import styles from './app.module.css'
 
-function App() {
+import { Navigation } from './components/navigation/Navigation'
+import { Display } from './components/display/Display'
+import { MetaMaskError } from './components/metaMaskError/MetaMaskError'
+import { MetaMaskContextProvider } from './hooks/UseMetaMask'
+import { Box, ThemeProvider } from '@mui/material'
+import { darkTheme } from './utils/theme'
+
+const App = () => {
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-    >
-      <h1>RatherLabsChallenge</h1>
-      <Button variant="contained">Lets Go!</Button>
-    </Box>
+    <ThemeProvider theme={darkTheme}>
+      <MetaMaskContextProvider>
+        <Box className={styles.appContainer}>
+          <Navigation />
+          <Display />
+          <MetaMaskError />
+        </Box>
+      </MetaMaskContextProvider>
+    </ThemeProvider>
   )
 }
 
