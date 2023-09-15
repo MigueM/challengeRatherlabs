@@ -20,7 +20,7 @@ export const Navigation = () => {
               <Button variant="contained">Install MetaMask</Button>
             </Link>
           )}
-          {wallet.accounts.length < 1 && (
+          {hasProvider && wallet.accounts.length < 1 && (
             <Button
               disabled={isConnecting}
               onClick={connectMetaMask}
