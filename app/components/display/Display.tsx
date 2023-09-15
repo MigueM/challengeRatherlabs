@@ -1,10 +1,10 @@
-import { useMetaMask } from '@/app/hooks/UseMetaMask'
+import { changeNetwork, useMetaMask } from '@/app/hooks/UseMetaMask'
 import { formatChainAsNum } from '@/app/utils/format'
 import styles from './display.module.css'
-import { Box, Container, Stack } from '@mui/material'
+import { Box, Button, Container, Stack } from '@mui/material'
 
 export const Display = () => {
-  const { wallet, hasProvider } = useMetaMask()
+  const { wallet, hasProvider, setErrorMessage, clearError } = useMetaMask()
   return (
     <Box className={styles.display}>
       {!hasProvider && (
@@ -12,20 +12,29 @@ export const Display = () => {
           <Container> To continue you need to install metamask 🏗️ </Container>
         </Box>
       )}
+
       {wallet.accounts.length < 1 && (
         <Box>
           <Container> Please login with metamask </Container>
         </Box>
       )}
-      {wallet.accounts.length > 0 && (
-        <Stack>
-          <Container>Wallet Accounts: {wallet.accounts[0]}</Container>
-          <Container>Wallet Balance: {wallet.balance}</Container>
-          <Container>Hex ChainId: {wallet.chainId}</Container>
+
+      {formatChainAsNum(wallet.chainId) === 5 ? (
+        <Box>
+          <Container> You are connected to Goerly Network </Container>
+        </Box>
+      ) : (
+        <Box>
           <Container>
-            Numeric ChainId: {formatChainAsNum(wallet.chainId)}
+            {' '}
+            This app is meant to be running on Goerly Test Network{' '}
           </Container>
-        </Stack>
+          <Button
+            onClick={() => changeNetwork({ setErrorMessage, clearError })}
+          >
+            Change Network
+          </Button>
+        </Box>
       )}
     </Box>
   )

@@ -7,7 +7,6 @@ import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material'
 
 export const Navigation = () => {
   const { wallet, hasProvider, isConnecting, connectMetaMask } = useMetaMask()
-  console.log('hasProvider', hasProvider)
   return (
     <AppBar>
       <Toolbar>
