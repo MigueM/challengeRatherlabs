@@ -5,7 +5,6 @@ import { Box, Container, Stack } from '@mui/material'
 
 export const Display = () => {
   const { wallet, hasProvider } = useMetaMask()
-  console.log(wallet)
   return (
     <Box className={styles.display}>
       {!hasProvider && (

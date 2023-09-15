@@ -19,7 +19,7 @@ export const Navigation = () => {
               <Button variant="contained">Install MetaMask</Button>
             </Link>
           )}
-          {window.ethereum?.isMetaMask && wallet.accounts.length < 1 && (
+          {!hasProvider && wallet.accounts.length < 1 && (
             <Button
               disabled={isConnecting}
               onClick={connectMetaMask}
