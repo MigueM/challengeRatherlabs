@@ -7,6 +7,7 @@ import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material'
 
 export const Navigation = () => {
   const { wallet, hasProvider, isConnecting, connectMetaMask } = useMetaMask()
+  console.log('hasProvider', hasProvider)
   return (
     <AppBar>
       <Toolbar>
@@ -19,7 +20,7 @@ export const Navigation = () => {
               <Button variant="contained">Install MetaMask</Button>
             </Link>
           )}
-          {hasProvider && wallet.accounts.length < 1 && (
+          {wallet.accounts.length < 1 && (
             <Button
               disabled={isConnecting}
               onClick={connectMetaMask}
