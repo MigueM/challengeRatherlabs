@@ -28,7 +28,7 @@ interface MetaMaskContextData {
   isConnecting: boolean
   connectMetaMask: () => void
   clearError: () => void
-  setErrorMessage: Dispatch<SetStateAction<string>>
+  changeToGoerlyNetwork: () => void
 }
 
 const disconnectedState: WalletState = {
@@ -125,6 +125,20 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     setIsConnecting(false)
   }
 
+  const changeToGoerlyNetwork = async () => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x5' }],
+        })
+        clearError()
+      } catch (error: any) {
+        setErrorMessage(error.message)
+      }
+    }
+  }
+
   return (
     <MetaMaskContext.Provider
       value={{
@@ -135,7 +149,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         isConnecting,
         connectMetaMask,
         clearError,
-        setErrorMessage,
+        changeToGoerlyNetwork,
       }}
     >
       {children}
@@ -151,26 +165,4 @@ export const useMetaMask = () => {
     )
   }
   return context
-}
-
-interface changeNetworkData {
-  setErrorMessage: Dispatch<SetStateAction<string>>
-  clearError: () => void
-}
-
-export const changeNetwork = async ({
-  setErrorMessage,
-  clearError,
-}: changeNetworkData) => {
-  if (window.ethereum) {
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x5' }],
-      })
-      clearError()
-    } catch (error: any) {
-      setErrorMessage(error.message)
-    }
-  }
 }
