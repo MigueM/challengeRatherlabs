@@ -1,12 +1,20 @@
 'use client'
-import { useMetaMask } from '@/app/hooks/UseMetaMask'
+import { useMetaMask } from '@/app/hooks/useMetaMask'
 import { formatAddress } from '@/app/utils/format'
 import styles from './navigation.module.css'
 import Link from 'next/link'
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material'
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Toolbar,
+  Typography,
+} from '@mui/material'
 
 export const Navigation = () => {
-  const { wallet, hasProvider, isConnecting, connectMetaMask } = useMetaMask()
+  const { wallet, hasProvider, isConnecting, connectMetaMask, addQuizToken } =
+    useMetaMask()
   return (
     <AppBar>
       <Toolbar>
@@ -29,17 +37,22 @@ export const Navigation = () => {
             </Button>
           )}
           {hasProvider && wallet.accounts.length > 0 && (
-            <a
-              className="text_link tooltip-bottom"
-              href={`https://etherscan.io/address/${wallet}`}
-              target="_blank"
-              data-tooltip="Open in Block Explorer"
-              rel="noreferrer"
-            >
-              <Button variant="contained">
-                {formatAddress(wallet.accounts[0])}
+            <Box className={styles.walletData}>
+              <Button variant="text" onClick={() => addQuizToken()}>
+                $QUIZ:{wallet.balance}
               </Button>
-            </a>
+              <a
+                className="text_link tooltip-bottom"
+                href={`https://etherscan.io/address/${wallet.accounts[0]}`}
+                target="_blank"
+                data-tooltip="Open in Block Explorer"
+                rel="noreferrer"
+              >
+                <Button variant="outlined">
+                  {formatAddress(wallet.accounts[0])}
+                </Button>
+              </a>
+            </Box>
           )}
         </Box>
       </Toolbar>

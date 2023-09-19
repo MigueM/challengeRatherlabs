@@ -16,16 +16,25 @@
   display: inline-block;
   line-height: 36px;
   height: 36px;
-  background: linear-gradient(to right, #e757fa, #57fafa);
+  background: #1976d2;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .rightNav {
+  display: flex;
   color: #ddd;
   margin-left: auto;
   line-height: 36px;
   height: 36px;
   width: auto;
+}
+
+.walletData {
+  display: flex;
+  max-width: 20em;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1em;
 }

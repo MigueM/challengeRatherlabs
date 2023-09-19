@@ -2,5 +2,11 @@
   height: 36px;
   padding: 16px;
   color: #efefef;
+  align-items: center;
   background-color: transparent;
+}
+.errorMessage {
+  display: flex;
+  max-height: 3em;
+  overflow-y: auto;
 }

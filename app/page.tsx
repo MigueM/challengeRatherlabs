@@ -5,7 +5,7 @@ import styles from './app.module.css'
 import { Navigation } from './components/navigation/Navigation'
 import { Display } from './components/display/Display'
 import { MetaMaskError } from './components/metaMaskError/MetaMaskError'
-import { MetaMaskContextProvider } from './hooks/UseMetaMask'
+import { MetaMaskContextProvider } from './hooks/MetaMaskProvider'
 import { Box, ThemeProvider } from '@mui/material'
 import { darkTheme } from './utils/theme'
 

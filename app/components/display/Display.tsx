@@ -1,7 +1,8 @@
-import { useMetaMask } from '@/app/hooks/UseMetaMask'
+import { useMetaMask } from '@/app/hooks/useMetaMask'
 import { formatChainAsNum } from '@/app/utils/format'
 import styles from './display.module.css'
-import { Box, Button, Container, Stack } from '@mui/material'
+import { Box, Button, Container } from '@mui/material'
+import Survey from '../survey/Survey'
 
 const Install = ({ hasProvider }: { hasProvider: boolean | null }) => {
   if (!hasProvider)
@@ -47,11 +48,15 @@ const ChangeNetwork = ({
 }
 
 export const Display = () => {
-  const { wallet, hasProvider, changeToGoerlyNetwork } = useMetaMask()
-
+  const {
+    wallet,
+    hasProvider,
+    changeToGoerlyNetwork,
+    submitSurvey,
+    surveyData,
+  } = useMetaMask()
   const signed = wallet.accounts.length > 0
   const signedAndGoerly = signed && formatChainAsNum(wallet.chainId) === 5
-
   return (
     <Box className={styles.display}>
       <Install hasProvider={hasProvider} />
@@ -59,7 +64,9 @@ export const Display = () => {
 
       {signedAndGoerly ? (
         <Box>
-          <Container> You are connected to Goerly Network </Container>
+          <Box className={styles.balanceContainer}>
+            <Survey surveyData={surveyData} submitSurvey={submitSurvey} />
+          </Box>
         </Box>
       ) : (
         <ChangeNetwork

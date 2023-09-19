@@ -1,6 +1,6 @@
-import { useMetaMask } from '@/app/hooks/UseMetaMask'
+import { useMetaMask } from '@/app/hooks/useMetaMask'
 import styles from './metaMaskError.module.css'
-import { BottomNavigation, Box } from '@mui/material'
+import { BottomNavigation, Box, Container } from '@mui/material'
 
 export const MetaMaskError = () => {
   const { error, errorMessage, clearError } = useMetaMask()
@@ -8,12 +8,14 @@ export const MetaMaskError = () => {
     <BottomNavigation
       className={styles.metaMaskError}
       style={
-        error ? { backgroundColor: 'brown' } : { backgroundColor: 'black' }
+        error ? { backgroundColor: 'brown' } : { backgroundColor: 'unset' }
       }
     >
       {error && (
         <Box onClick={clearError}>
-          <strong>Error:</strong> {errorMessage}
+          <Container className={styles.errorMessage}>
+            <strong>Error: </strong> {errorMessage}
+          </Container>
         </Box>
       )}
     </BottomNavigation>
