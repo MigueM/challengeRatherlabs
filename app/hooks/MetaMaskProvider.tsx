@@ -16,6 +16,12 @@ const disconnectedState: WalletState = {
   balance: '',
   chainId: '',
 }
+//window.etherum error 🤷 tried solving it declaring it with the env.d.ts file but only this works
+declare global {
+  interface Window {
+    ethereum: any
+  }
+}
 
 export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [hasProvider, setHasProvider] = useState<boolean | null>(null)
