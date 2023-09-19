@@ -24,7 +24,11 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const clearError = () => setErrorMessage('')
   const [wallet, setWallet] = useState(disconnectedState)
   const quizTokenAddr = '0x437eF217203452317C3C955Cf282b1eE5F6aaF72'
-  const web3 = (window as any)?.ethereum && new Web3((window as any).ethereum)
+  const quizTokenAddrENV = process.env.QUIZ_TOKEN_ADDR
+  const web3 =
+    typeof window !== 'undefined' && (window as any)?.ethereum
+      ? new Web3((window as any).ethereum)
+      : null
 
   const _updateWallet = useCallback(async (providedAccounts?: any) => {
     const accounts =

@@ -40,8 +40,7 @@ const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
         const timer = setTimeout(() => {
           setQuestionDisabled(true) // Disable the question when time runs out
           if (currentQuestionIndex < questions.length - 1) {
-            // Do not automatically move to the next question
-            setTimeLeft(null)
+            setTimeLeft(null) // Do not automatically move to the next question
           }
         }, currentQuestion.lifetimeSeconds * 1000)
 
@@ -62,8 +61,7 @@ const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
   const nextQuestion = (option: option) => {
     setCurrentQuestionIndex(currentQuestionIndex + 1)
     setQuestionDisabled(false) // Enable the next question
-    setTimeLeft(questions[currentQuestionIndex + 1]?.lifetimeSeconds || null)
-    // Set the next question's time
+    setTimeLeft(questions[currentQuestionIndex + 1]?.lifetimeSeconds || null) // Set the next question's time
     setSelectedOptions([...selectedOptions, option])
   }
   return (
