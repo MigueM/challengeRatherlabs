@@ -25,15 +25,22 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [wallet, setWallet] = useState(disconnectedState)
   const quizContractAddress = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
 
-  const web3 =
-    typeof window !== 'undefined' && (window as any)?.ethereum
-      ? new Web3((window as any).ethereum)
-      : null
+  let web3: any
+  if (typeof window !== 'undefined' && (window as any)?.ethereum) {
+    web3 = new Web3((window as any).ethereum)
+  } else {
+    web3 = null
+  }
 
   const _updateWallet = useCallback(async (providedAccounts?: any) => {
-    const accounts =
-      providedAccounts ||
-      (await window.ethereum.request({ method: 'eth_accounts' }))
+    let accounts
+
+    if (providedAccounts) {
+      accounts = providedAccounts
+    } else {
+      accounts = await window.ethereum.request({ method: 'eth_accounts' })
+    }
+
     if (accounts.length === 0) {
       setWallet(disconnectedState)
       return
@@ -134,9 +141,12 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
 
   const submitSurvey = async (answers: answers) => {
     const { surveyID, answerIds } = answers
-    const contract = web3
-      ? (new web3.eth.Contract(abi, quizContractAddress) as any)
-      : null
+    let contract: any
+    if (web3) {
+      contract = new web3.eth.Contract(abi, quizContractAddress)
+    } else {
+      contract = null
+    }
     const contractSubmit = contract?.methods.submit(surveyID, answerIds)
 
     try {
