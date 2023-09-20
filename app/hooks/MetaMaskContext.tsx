@@ -13,8 +13,8 @@ export interface MetaMaskContextData {
   errorMessage: string
   isConnecting: boolean
   surveyData: any
+  clearError: () => void
   connectMetaMask: () => Promise<void>
-  clearError: () => Promise<void>
   changeToGoerlyNetwork: () => Promise<void>
   addQuizToken: () => Promise<void>
   submitSurvey: (answers: any) => Promise<void>

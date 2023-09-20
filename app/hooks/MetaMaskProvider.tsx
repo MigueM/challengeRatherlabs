@@ -4,7 +4,7 @@ import surveyData from '../survey-sample.json'
 import { formatBalance } from '../utils/format'
 import detectEthereumProvider from '@metamask/detect-provider'
 import Web3 from 'web3'
-import surveyAbi from '../abi.json'
+import { abi } from '../abi'
 
 const disconnectedState: WalletState = {
   accounts: [],
@@ -24,7 +24,11 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const clearError = () => setErrorMessage('')
   const [wallet, setWallet] = useState(disconnectedState)
   const quizContractAddress = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
-  const web3 = new Web3(window.ethereum)
+
+  const web3 =
+    typeof window !== 'undefined' && (window as any)?.ethereum
+      ? new Web3((window as any).ethereum)
+      : null
 
   const _updateWallet = useCallback(async (providedAccounts?: any) => {
     const accounts =
@@ -90,6 +94,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     }
     setIsConnecting(false)
   }
+
   const changeToGoerlyNetwork = async () => {
     if (window.ethereum) {
       try {
@@ -103,6 +108,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       }
     }
   }
+
   const addQuizToken = async () => {
     try {
       await window.ethereum.request({
@@ -120,17 +126,16 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       setErrorMessage(error.message)
     }
   }
+
   interface answers {
     surveyID: number
     answerIds: any[]
   }
+
   const submitSurvey = async (answers: answers) => {
     const { surveyID, answerIds } = answers
 
-    const contract = new web3.eth.Contract(
-      surveyAbi,
-      quizContractAddress
-    ) as any
+    const contract = new web3.eth.Contract(abi, quizContractAddress) as any
     const contractSubmit = contract.methods.submit(surveyID, answerIds)
 
     try {
