@@ -13,13 +13,11 @@ export interface MetaMaskContextData {
   errorMessage: string
   isConnecting: boolean
   surveyData: any
-  connectMetaMask: () => void
-  clearError: () => void
-  changeToGoerlyNetwork: () => void
+  connectMetaMask: () => Promise<void>
+  clearError: () => Promise<void>
+  changeToGoerlyNetwork: () => Promise<void>
   addQuizToken: () => Promise<void>
-  submitSurvey: () => void
+  submitSurvey: (answers: any) => Promise<void>
 }
 
-export const MetaMaskContext = createContext<MetaMaskContextData>(
-  {} as MetaMaskContextData
-)
+export const MetaMaskContext = createContext<MetaMaskContextData | null>(null)

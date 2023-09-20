@@ -1,9 +1,9 @@
 import { useContext } from 'react'
-import { MetaMaskContext } from './MetaMaskContext'
+import { MetaMaskContext, MetaMaskContextData } from './MetaMaskContext'
 
-export const useMetaMask = () => {
+export const useMetaMask = (): MetaMaskContextData => {
   const context = useContext(MetaMaskContext)
-  if (context === undefined) {
+  if (context === null) {
     throw new Error(
       'useMetaMask must be used within a "MetaMaskContextProvider"'
     )

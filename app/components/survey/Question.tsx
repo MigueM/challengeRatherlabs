@@ -34,6 +34,7 @@ const Question = ({
     <Box className={styles.questionContainer}>
       <h2>{question.text}</h2>
       <img
+        key={question.image}
         className={styles.questionImage}
         src={question.image}
         alt={`Question image`}

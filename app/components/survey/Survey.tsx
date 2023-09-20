@@ -12,7 +12,7 @@ interface surveyData {
 
 interface SurveyProps {
   surveyData: surveyData
-  submitSurvey: () => void
+  submitSurvey: ({}) => void
 }
 
 interface option {
@@ -52,7 +52,8 @@ const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
         }, 1000)
 
         return () => {
-          clearTimeout(timer), clearInterval(countdownInterval)
+          clearTimeout(timer)
+          clearInterval(countdownInterval)
         }
       }
     }

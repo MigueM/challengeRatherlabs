@@ -10,13 +10,15 @@ interface questionsData {
 interface ResultsProps {
   questions: questionsData[]
   selectedOptions: any
-  submitSurvey: () => void
+  submitSurvey: (answers: any) => void
 }
 const Results = ({
   questions,
   selectedOptions,
   submitSurvey,
 }: ResultsProps) => {
+  const answIds = selectedOptions.map((option: any) => option.index)
+  const answers = { surveyID: 1, answerIds: answIds }
   return (
     <Box className={styles.surveyResultsContainer}>
       <h3>Thank you for completing the survey</h3>
@@ -39,7 +41,7 @@ const Results = ({
           ))}
         </List>
       </Box>
-      <Button variant="contained" onClick={() => submitSurvey()}>
+      <Button variant="contained" onClick={() => submitSurvey(answers)}>
         Submit Survey
       </Button>
     </Box>
