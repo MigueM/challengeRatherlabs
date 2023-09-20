@@ -134,9 +134,10 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
 
   const submitSurvey = async (answers: answers) => {
     const { surveyID, answerIds } = answers
-
-    const contract = new web3.eth.Contract(abi, quizContractAddress) as any
-    const contractSubmit = contract.methods.submit(surveyID, answerIds)
+    const contract = web3
+      ? (new web3.eth.Contract(abi, quizContractAddress) as any)
+      : null
+    const contractSubmit = contract?.methods.submit(surveyID, answerIds)
 
     try {
       await contractSubmit.send({
