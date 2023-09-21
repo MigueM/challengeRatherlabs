@@ -98,6 +98,11 @@ A survey company wants to make a new quiz form that rewards users with tokens fo
 - Material Design UI documentation: https://m2.material.io/design: This documentation provides information on the Material Design UI design system and how to use it to create user interfaces.
 
 - Goetly ETH Faucet: https://testnet-faucet.com/goerli/: This website that provides free testnet tokens to Ethereum developers for testing smart contracts and decentralized applications.
+
+- Conventional Commits: https://www.conventionalcommits.org/en/v1.0.0/: This is a lightweight convention for writing commit messages that makes it easier to understand the changes made in a codebase.
+
+-Gitmoji: https://gitmoji.dev/: Like Conventional Commits is a convention that makes it easier to understand the type of change.
+
 - Supplyed Links:
   -- [Smart contract](https://goerli.etherscan.io/token/0x437eF217203452317C3C955Cf282b1eE5F6aaF72?a=0x437ef217203452317c3c955cf282b1ee5f6aaf72)
   -- [blockchain-challenge-utils](https://github.com/rather-labs/blockchain-challenge-utils)
