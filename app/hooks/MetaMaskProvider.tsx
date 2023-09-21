@@ -23,8 +23,8 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [errorMessage, setErrorMessage] = useState('')
   const clearError = () => setErrorMessage('')
   const [wallet, setWallet] = useState(disconnectedState)
-  const quizContractAddress = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
-  const addrPrefix = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
+  const CONTRACT_ADDR = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
+  const ACCOUNT_PREFIX = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
 
   const _updateWallet = useCallback(async (providedAccounts?: string[]) => {
     const accounts =
@@ -35,8 +35,8 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       return
     }
     const callObject = {
-      to: quizContractAddress,
-      data: `0x70a08231000000000000000000000000${accounts[0].slice(2)}`,
+      to: CONTRACT_ADDR,
+      data: ACCOUNT_PREFIX + accounts[0].slice(2),
     }
     const balance = formatBalance(
       await window.ethereum.request({
@@ -44,9 +44,16 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         params: [callObject, 'latest'],
       })
     )
-    const chainId = await window.ethereum.request({
-      method: 'eth_chainId',
-    })
+    let chainId = ''
+    try {
+      clearError()
+      const chain = await window.ethereum.request({
+        method: 'eth_chainId',
+      })
+      chainId = chain
+    } catch (err: any) {
+      setErrorMessage(err.message)
+    }
     setWallet({ accounts, balance, chainId })
   }, [])
 
@@ -115,7 +122,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         params: {
           type: 'ERC20',
           options: {
-            address: quizContractAddress,
+            address: CONTRACT_ADDR,
             symbol: 'QUIZ',
             decimals: 18,
           },
@@ -136,7 +143,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum)
       const signer = await provider.getSigner()
-      const contract = new ethers.Contract(quizContractAddress, abi, signer)
+      const contract = new ethers.Contract(CONTRACT_ADDR, abi, signer)
       await contract.submit(surveyID, answerIds)
     } catch (error: any) {
       setErrorMessage(error.message)
