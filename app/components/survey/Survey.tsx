@@ -5,7 +5,7 @@ import Question from './Question'
 import Results from './Results'
 
 export interface selectedOption {
-  index: string
+  index: number
   value: {
     text: string
   }
@@ -37,8 +37,8 @@ const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
   const [surveyStart, setsurveyStart] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedOptions, setSelectedOptions] = useState<selectedOption[]>([])
-  const [timeLeft, setTimeLeft] = useState<number | null>(
-    questions[0]?.lifetimeSeconds || null
+  const [timeLeft, setTimeLeft] = useState<number>(
+    questions[0]?.lifetimeSeconds || 0
   )
   const [questionDisabled, setQuestionDisabled] = useState(true)
 
@@ -50,14 +50,14 @@ const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
         const timer = setTimeout(() => {
           setQuestionDisabled(true) // Disable the question when time runs out
           if (currentQuestionIndex < questions.length - 1) {
-            setTimeLeft(null) // Do not automatically move to the next question
+            setTimeLeft(0) // Do not automatically move to the next question
           }
         }, currentQuestion.lifetimeSeconds * 1000)
 
         //display current time
         const countdownInterval = setInterval(() => {
           setTimeLeft((prevTimeLeft) =>
-            prevTimeLeft !== null ? prevTimeLeft - 1 : null
+            prevTimeLeft !== 0 ? prevTimeLeft - 1 : 0
           )
         }, 1000)
 
@@ -72,7 +72,7 @@ const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
   const nextQuestion = (selectedOption: selectedOption) => {
     setCurrentQuestionIndex(currentQuestionIndex + 1)
     setQuestionDisabled(false) // Enable the next question
-    setTimeLeft(questions[currentQuestionIndex + 1]?.lifetimeSeconds || null) // Set the next question's time
+    setTimeLeft(questions[currentQuestionIndex + 1]?.lifetimeSeconds || 0) // Set the next question's time
     setSelectedOptions([...selectedOptions, selectedOption])
   }
   return (

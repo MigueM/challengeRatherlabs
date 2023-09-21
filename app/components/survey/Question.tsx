@@ -17,8 +17,9 @@ const Question = ({
   timeLeft,
   questionDisabled,
 }: QuestionProps) => {
-  const blank = { index: '', value: { text: 'didnt answer' } }
+  const blank = { index: NaN, value: { text: 'didnt answer' } }
   const [selected, setSelected] = useState<selectedOption | typeof blank>(blank)
+
   const handleOptionChange = (value: option, index: number) => {
     const optionCorrection = { index, value }
     setSelected(optionCorrection)
@@ -32,7 +33,7 @@ const Question = ({
         src={question.image}
         alt={`Question image`}
       />
-      {(timeLeft !== null || timeLeft == 0) && (
+      {(timeLeft !== 0 || !questionDisabled) && (
         <p>Time Left: {timeLeft} seconds</p>
       )}
       {questionDisabled && <p>Run out of time</p>}
@@ -53,7 +54,7 @@ const Question = ({
         onClick={() => {
           nextQuestion(selected), setSelected(blank)
         }}
-        disabled={!(selected.index !== '') && !questionDisabled}
+        disabled={isNaN(selected.index) && !questionDisabled}
       >
         Next
       </Button>

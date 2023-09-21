@@ -1,10 +1,10 @@
 import { Box, Button, Container, List, ListItem } from '@mui/material'
 import styles from './survey.module.css'
-import { option, question, selectedOption } from './Survey'
+import { question, selectedOption } from './Survey'
 
 export interface answers {
   surveyID: number
-  answIds: string[]
+  answerIds: number[]
 }
 interface ResultsProps {
   questions: question[]
