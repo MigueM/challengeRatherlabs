@@ -27,61 +27,31 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const addrPrefix = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
 
   const _updateWallet = useCallback(async (providedAccounts?: string[]) => {
-    let accounts = []
-    if (providedAccounts) {
-      accounts = providedAccounts
-    } else {
-      try {
-        clearError()
-        const account = await window.ethereum.request({
-          method: 'eth_accounts',
-        })
-        if (Array.isArray(account) && typeof account[0] === 'string') {
-          accounts = account
-        } else {
-          setErrorMessage('Invalid response accounts')
-        }
-      } catch (err: any) {
-        setErrorMessage(err.message)
-      }
-    }
-
+    const accounts =
+      providedAccounts ||
+      (await window.ethereum.request({ method: 'eth_accounts' }))
     if (accounts.length === 0) {
       setWallet(disconnectedState)
       return
     }
-
-    let balance = ''
-    try {
-      clearError()
-      const callObject = {
-        to: quizContractAddress,
-        data: `${addrPrefix}${accounts[0].slice(2)}`,
-      }
-      const call = await window.ethereum.request({
+    const callObject = {
+      to: quizContractAddress,
+      data: `0x70a08231000000000000000000000000${accounts[0].slice(2)}`,
+    }
+    const balance = formatBalance(
+      await window.ethereum.request({
         method: 'eth_call',
         params: [callObject, 'latest'],
       })
-      balance = formatBalance(call)
-    } catch (err: any) {
-      setErrorMessage(err.message)
-    }
-
-    let chainId = ''
-    try {
-      clearError()
-      const chain = await window.ethereum.request({
-        method: 'eth_chainId',
-      })
-      chainId = chain
-    } catch (err: any) {
-      setErrorMessage(err.message)
-    }
-
+    )
+    const chainId = await window.ethereum.request({
+      method: 'eth_chainId',
+    })
     setWallet({ accounts, balance, chainId })
   }, [])
 
-  //memoize functions
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  //memoize functions 👇
   const updateWalletAndAccounts = useCallback(
     () => _updateWallet(),
     [_updateWallet]
