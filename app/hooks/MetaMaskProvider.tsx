@@ -28,13 +28,6 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [wallet, setWallet] = useState(disconnectedState)
 
   const _updateWallet = useCallback(async (providedAccounts?: string[]) => {
-    /* const accounts =
-      providedAccounts ||
-      ({await window.ethereum.request({ method: 'eth_accounts' })})
-    if (accounts.length === 0) {
-      setWallet(disconnectedState)
-      return
-    } */
     let accounts = providedAccounts || []
     try {
       clearError()
