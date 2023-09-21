@@ -89,14 +89,6 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     setWallet({ accounts, balance, chainId })
   }, [])
 
-  /*   const updateWallet = async (accounts?: string[]) => {
-    try {
-      await _updateWallet(accounts)
-    } catch (err: any) {
-      setErrorMessage(err.message)
-    }
-  }
- */
   useEffect(() => {
     const getProvider = async () => {
       let provider: any | null
