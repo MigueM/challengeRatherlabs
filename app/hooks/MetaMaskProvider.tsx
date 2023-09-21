@@ -81,6 +81,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     setWallet({ accounts, balance, chainId })
   }, [])
 
+  //memoize functions
   const updateWalletAndAccounts = useCallback(
     () => _updateWallet(),
     [_updateWallet]
@@ -97,6 +98,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
 
       if (provider) {
         updateWalletAndAccounts()
+
         window.ethereum.on('accountsChanged', (accounts: string[]) =>
           _updateWallet(accounts)
         )
@@ -108,6 +110,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       window.ethereum?.removeListener('accountsChanged', updateWallet)
       window.ethereum?.removeListener('chainChanged', updateWalletAndAccounts)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWallet, updateWalletAndAccounts])
 
   const connectMetaMask = async () => {
