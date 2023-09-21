@@ -51,11 +51,9 @@ A survey company wants to make a new quiz form that rewards users with tokens fo
 
 **Screenshots:**
 
-[![screen1.png](https://i.postimg.cc/C13w78tr/screen1.png)](https://postimg.cc/tZz0Cs9F)
-[![screen2.png](https://i.postimg.cc/SQ9SsZ2B/screen2.png)](https://postimg.cc/5jxdKSmg)
-[![screen3.png](https://i.postimg.cc/rFCqGK9g/screen3.png)](https://postimg.cc/hfvFc467)
-[![screen4.png](https://i.postimg.cc/hvVc5jRD/screen4.png)](https://postimg.cc/JH7fyRhv)
-[![screen5.png](https://i.postimg.cc/BQGq1x2X/screen5.png)](https://postimg.cc/mh8xv1Xs)
+| Screenshot 1 | Screenshot 2 | Screenshot 3 | Screenshot 4 | Screenshot 5 |
+|---|---|---|---|---|
+| [![screen1.png](https://i.postimg.cc/C13w78tr/screen1.png)](https://postimg.cc/tZz0Cs9F) | [![screen2.png](https://i.postimg.cc/SQ9SsZ2B/screen2.png)](https://postimg.cc/5jxdKSmg) | [![screen3.png](https://i.postimg.cc/rFCqGK9g/screen3.png)](https://postimg.cc/hfvFc467) | [![screen4.png](https://i.postimg.cc/hvVc5jRD/screen4.png)](https://postimg.cc/JH7fyRhv) | [![screen5.png](https://i.postimg.cc/BQGq1x2X/screen5.png)](https://postimg.cc/mh8xv1Xs) |
 
 ## Development notes
 
