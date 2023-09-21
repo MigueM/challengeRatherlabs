@@ -5,6 +5,8 @@ import { formatBalance } from '../utils/format'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { abi } from '../abi'
 import { ethers, BrowserProvider, Eip1193Provider } from 'ethers'
+const CONTRACT_ADDR = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
+const ACCOUNT_PREFIX = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
 
 const disconnectedState: WalletState = {
   accounts: [],
@@ -17,22 +19,39 @@ declare global {
     ethereum: Eip1193Provider & BrowserProvider
   }
 }
+
 export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [hasProvider, setHasProvider] = useState<boolean | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const clearError = () => setErrorMessage('')
   const [wallet, setWallet] = useState(disconnectedState)
-  const CONTRACT_ADDR = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
-  const ACCOUNT_PREFIX = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
 
   const _updateWallet = useCallback(async (providedAccounts?: string[]) => {
-    const accounts =
+    /* const accounts =
       providedAccounts ||
-      (await window.ethereum.request({ method: 'eth_accounts' }))
+      ({await window.ethereum.request({ method: 'eth_accounts' })})
     if (accounts.length === 0) {
       setWallet(disconnectedState)
       return
+    } */
+    let accounts = providedAccounts || []
+    try {
+      clearError()
+      if (providedAccounts) {
+        accounts = providedAccounts
+      } else {
+        const account = await window.ethereum.request({
+          method: 'eth_accounts',
+        })
+        if (Array.isArray(account) && typeof account[0] === 'string') {
+          accounts = account
+        } else {
+          setErrorMessage('Invalid response accounts')
+        }
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message)
     }
 
     let balance = ''
