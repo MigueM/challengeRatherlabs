@@ -37,6 +37,7 @@
   border-radius: 25px;
   gap: 0.5em;
   padding: 1em;
+  margin-bottom: 10%;
 }
 .optionList {
   display: flex;

@@ -38,3 +38,7 @@
   justify-content: space-evenly;
   gap: 1em;
 }
+
+.navButton {
+  min-width: 190px;
+}

@@ -24,7 +24,7 @@ const LogIn = ({
   if (!signed && hasProvider)
     return (
       <Box>
-        <Container> Please login with metamask </Container>
+        <Container> Please login with metamask 🦊</Container>
       </Box>
     )
   return null
