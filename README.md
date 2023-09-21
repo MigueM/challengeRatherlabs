@@ -101,7 +101,7 @@ A survey company wants to make a new quiz form that rewards users with tokens fo
 
 - Conventional Commits: https://www.conventionalcommits.org/en/v1.0.0/: This is a lightweight convention for writing commit messages that makes it easier to understand the changes made in a codebase.
 
-- Gitmoji: https://gitmoji.dev/: Like Conventional Commits is a convention that makes it easier to understand the type of change.
+- Gitmoji: https://gitmoji.dev/: Like Conventional Commits this is a convention that makes it easier to understand the type of change.
 
 - Supplyed Links:
   -- [Smart contract](https://goerli.etherscan.io/token/0x437eF217203452317C3C955Cf282b1eE5F6aaF72?a=0x437ef217203452317c3c955cf282b1ee5f6aaf72)
