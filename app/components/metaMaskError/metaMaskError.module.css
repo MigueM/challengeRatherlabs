@@ -8,9 +8,9 @@
 .errorMessageContainer {
   display: flex;
   max-height: 3em;
+  width: 90vw;
 }
 .errorMessage {
-  width: 90vw;
   display: block;
   white-space: nowrap;
   overflow-y: auto;

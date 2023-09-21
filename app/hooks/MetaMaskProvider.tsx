@@ -5,6 +5,8 @@ import { formatBalance } from '../utils/format'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { abi } from '../abi'
 import { ethers, BrowserProvider, Eip1193Provider } from 'ethers'
+const CONTRACT_ADDR = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
+const ACCOUNT_PREFIX = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
 
 const disconnectedState: WalletState = {
   accounts: [],
@@ -17,22 +19,21 @@ declare global {
     ethereum: Eip1193Provider & BrowserProvider
   }
 }
+
 export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [hasProvider, setHasProvider] = useState<boolean | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const clearError = () => setErrorMessage('')
   const [wallet, setWallet] = useState(disconnectedState)
-  const quizContractAddress = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
-  const addrPrefix = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
 
   const _updateWallet = useCallback(async (providedAccounts?: string[]) => {
-    let accounts = []
-    if (providedAccounts) {
-      accounts = providedAccounts
-    } else {
-      try {
-        clearError()
+    let accounts = providedAccounts || []
+    try {
+      clearError()
+      if (providedAccounts) {
+        accounts = providedAccounts
+      } else {
         const account = await window.ethereum.request({
           method: 'eth_accounts',
         })
@@ -41,22 +42,17 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         } else {
           setErrorMessage('Invalid response accounts')
         }
-      } catch (err: any) {
-        setErrorMessage(err.message)
       }
-    }
-
-    if (accounts.length === 0) {
-      setWallet(disconnectedState)
-      return
+    } catch (err: any) {
+      setErrorMessage(err.message)
     }
 
     let balance = ''
     try {
       clearError()
       const callObject = {
-        to: quizContractAddress,
-        data: `${addrPrefix}${accounts[0].slice(2)}`,
+        to: CONTRACT_ADDR,
+        data: ACCOUNT_PREFIX + accounts[0].slice(2),
       }
       const call = await window.ethereum.request({
         method: 'eth_call',
@@ -77,16 +73,17 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     } catch (err: any) {
       setErrorMessage(err.message)
     }
-
     setWallet({ accounts, balance, chainId })
   }, [])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  //memoize functions 👇
   const updateWalletAndAccounts = useCallback(
     () => _updateWallet(),
     [_updateWallet]
   )
   const updateWallet = useCallback(
-    (accounts: string[]) => _updateWallet(accounts),
+    (accounts: any) => _updateWallet(accounts),
     [_updateWallet]
   )
 
@@ -97,10 +94,8 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
 
       if (provider) {
         updateWalletAndAccounts()
-        window.ethereum.on('accountsChanged', (accounts: string[]) =>
-          _updateWallet(accounts)
-        )
-        window.ethereum.on('chainChanged', () => _updateWallet())
+        window.ethereum.on('accountsChanged', updateWallet)
+        window.ethereum.on('chainChanged', updateWalletAndAccounts)
       }
     }
     getProvider()
@@ -113,11 +108,11 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const connectMetaMask = async () => {
     setIsConnecting(true)
     try {
-      clearError()
       const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts',
       })
-      _updateWallet(accounts)
+      clearError()
+      updateWallet(accounts)
     } catch (err: any) {
       setErrorMessage(err.message)
     }
@@ -146,7 +141,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
         params: {
           type: 'ERC20',
           options: {
-            address: quizContractAddress,
+            address: CONTRACT_ADDR,
             symbol: 'QUIZ',
             decimals: 18,
           },
@@ -167,7 +162,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum)
       const signer = await provider.getSigner()
-      const contract = new ethers.Contract(quizContractAddress, abi, signer)
+      const contract = new ethers.Contract(CONTRACT_ADDR, abi, signer)
       await contract.submit(surveyID, answerIds)
     } catch (error: any) {
       setErrorMessage(error.message)
