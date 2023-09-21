@@ -24,11 +24,14 @@ export const Navigation = () => {
         <Box className={styles.rightNav}>
           {!hasProvider && (
             <Link href="https://metamask.io" target="_blank" rel="noreferrer">
-              <Button variant="contained">Install MetaMask</Button>
+              <Button className={styles.navButton} variant="contained">
+                Install MetaMask
+              </Button>
             </Link>
           )}
           {hasProvider && wallet.accounts.length < 1 && (
             <Button
+              className={styles.navButton}
               disabled={isConnecting}
               onClick={connectMetaMask}
               variant="contained"

@@ -9,6 +9,7 @@
   display: flex;
   max-height: 3em;
   width: 90vw;
+  justify-content: center;
 }
 .errorMessage {
   display: block;
