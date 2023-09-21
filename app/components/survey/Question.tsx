@@ -2,17 +2,11 @@ import { Box, Button, List } from '@mui/material'
 import styles from './survey.module.css'
 import Option from './Option'
 import { useState } from 'react'
-
-interface option {
-  index: number
-  value: {
-    text: string
-  }
-}
+import { option, question, selectedOption } from './Survey'
 
 interface QuestionProps {
-  question: any
-  nextQuestion: (selected: option) => void
+  question: question
+  nextQuestion: (selected: selectedOption) => void
   timeLeft: number | null
   questionDisabled: boolean
 }
@@ -24,9 +18,8 @@ const Question = ({
   questionDisabled,
 }: QuestionProps) => {
   const blank = { index: '', value: { text: 'didnt answer' } }
-  const [selected, setSelected] = useState<any>(blank)
-
-  const handleOptionChange = (value: any, index: any) => {
+  const [selected, setSelected] = useState<selectedOption | typeof blank>(blank)
+  const handleOptionChange = (value: option, index: number) => {
     const optionCorrection = { index, value }
     setSelected(optionCorrection)
   }
@@ -44,7 +37,7 @@ const Question = ({
       )}
       {questionDisabled && <p>Run out of time</p>}
       <List className={styles.optionList}>
-        {question.options.map((option: any, index: number) => (
+        {question.options.map((option: option, index: number) => (
           <Option
             key={index}
             option={option}

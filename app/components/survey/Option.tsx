@@ -1,11 +1,12 @@
 import { FormControlLabel, ListItem, Radio } from '@mui/material'
 import styles from './survey.module.css'
+import { option } from './Survey'
 
 interface OptionProps {
-  option: any
+  option: option
   index: number
   selected: boolean
-  handleOptionChange: (option: any, index: number) => void
+  handleOptionChange: (option: option, index: number) => void
   questionDisabled: boolean
 }
 

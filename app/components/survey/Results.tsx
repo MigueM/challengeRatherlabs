@@ -1,23 +1,22 @@
 import { Box, Button, Container, List, ListItem } from '@mui/material'
 import styles from './survey.module.css'
+import { option, question, selectedOption } from './Survey'
 
-interface questionsData {
-  text: string
-  image: string
-  lifetimeSeconds: number
-  options: [{ text: number }]
+export interface answers {
+  surveyID: number
+  answIds: string[]
 }
 interface ResultsProps {
-  questions: questionsData[]
-  selectedOptions: any
-  submitSurvey: (answers: any) => void
+  questions: question[]
+  selectedOptions: selectedOption[]
+  submitSurvey: (answers: answers) => void
 }
 const Results = ({
   questions,
   selectedOptions,
   submitSurvey,
 }: ResultsProps) => {
-  const answIds = selectedOptions.map((option: any) => option.index)
+  const answIds = selectedOptions.map((option: selectedOption) => option.index)
   const answers = { surveyID: 1, answerIds: answIds }
   return (
     <Box className={styles.surveyResultsContainer}>
@@ -25,7 +24,7 @@ const Results = ({
       <p>Here are your answers:</p>
       <Box className={styles.answersContainer}>
         <List>
-          {questions.map((question: any, index: number) => (
+          {questions.map((question: question, index: number) => (
             <ListItem key={index}>
               <Container>
                 <strong>{question.text}:</strong>{' '}
@@ -34,7 +33,7 @@ const Results = ({
           ))}
         </List>
         <List>
-          {selectedOptions.map((option: any, index: number) => (
+          {selectedOptions.map((option: selectedOption, index: number) => (
             <ListItem key={index}>
               <Container>{option.value.text}</Container>
             </ListItem>

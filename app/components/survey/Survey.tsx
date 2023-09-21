@@ -4,29 +4,39 @@ import styles from './survey.module.css'
 import Question from './Question'
 import Results from './Results'
 
-interface surveyData {
+export interface selectedOption {
+  index: string
+  value: {
+    text: string
+  }
+}
+
+export interface option {
+  text: string
+}
+
+export interface question {
+  text: string
+  image: string
+  lifetimeSeconds: number
+  options: option[]
+}
+
+export interface surveyData {
   title: string
   image: string
-  questions: any
+  questions: question[]
 }
 
 interface SurveyProps {
   surveyData: surveyData
   submitSurvey: ({}) => void
 }
-
-interface option {
-  index: number
-  value: {
-    text: string
-  }
-}
-
 const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
   const questions = surveyData.questions
   const [surveyStart, setsurveyStart] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [selectedOptions, setSelectedOptions] = useState<Object[]>([])
+  const [selectedOptions, setSelectedOptions] = useState<selectedOption[]>([])
   const [timeLeft, setTimeLeft] = useState<number | null>(
     questions[0]?.lifetimeSeconds || null
   )
@@ -59,11 +69,11 @@ const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
     }
   }, [currentQuestionIndex, questionDisabled, questions])
 
-  const nextQuestion = (option: option) => {
+  const nextQuestion = (selectedOption: selectedOption) => {
     setCurrentQuestionIndex(currentQuestionIndex + 1)
     setQuestionDisabled(false) // Enable the next question
     setTimeLeft(questions[currentQuestionIndex + 1]?.lifetimeSeconds || null) // Set the next question's time
-    setSelectedOptions([...selectedOptions, option])
+    setSelectedOptions([...selectedOptions, selectedOption])
   }
   return (
     <Box className={styles.surveyContainer}>
