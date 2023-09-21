@@ -13,8 +13,10 @@ export const MetaMaskError = () => {
     >
       {error && (
         <Box onClick={clearError}>
-          <Container className={styles.errorMessage}>
-            <strong>Error: </strong> {errorMessage}
+          <Container className={styles.errorMessageContainer}>
+            <span className={styles.errorMessage}>
+              <strong>Error: </strong> {errorMessage}
+            </span>
           </Container>
         </Box>
       )}

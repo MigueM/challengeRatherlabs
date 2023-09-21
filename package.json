@@ -21,13 +21,13 @@
     "autoprefixer": "10.4.15",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
+    "ethers": "^6.7.1",
     "next": "13.4.19",
     "postcss": "8.4.28",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-query": "^3.39.3",
-    "typescript": "^5.2.2",
-    "web3": "^4.1.1"
+    "typescript": "^5.2.2"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",

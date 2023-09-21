@@ -3,8 +3,8 @@ import { MetaMaskContext, WalletState } from './MetaMaskContext'
 import surveyData from '../survey-sample.json'
 import { formatBalance } from '../utils/format'
 import detectEthereumProvider from '@metamask/detect-provider'
-import Web3 from 'web3'
 import { abi } from '../abi'
+import { ethers, BrowserProvider, Eip1193Provider } from 'ethers'
 
 const disconnectedState: WalletState = {
   accounts: [],
@@ -14,7 +14,7 @@ const disconnectedState: WalletState = {
 
 declare global {
   interface Window {
-    ethereum: any
+    ethereum: Eip1193Provider & BrowserProvider
   }
 }
 export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
@@ -25,14 +25,6 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
   const [wallet, setWallet] = useState(disconnectedState)
   const quizContractAddress = process.env.REACT_APP_QUIZ_CONTRACT_ADDR
   const addrPrefix = process.env.REACT_APP_ACCOUNT_ADD_PREFIX
-
-  const getWeb3 = (): Web3 | null => {
-    if (typeof window !== 'undefined' && window?.ethereum) {
-      return new Web3(window.ethereum)
-    } else {
-      return null
-    }
-  }
 
   const _updateWallet = useCallback(async (providedAccounts?: string[]) => {
     let accounts = []
@@ -89,29 +81,34 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     setWallet({ accounts, balance, chainId })
   }, [])
 
+  const updateWalletAndAccounts = useCallback(
+    () => _updateWallet(),
+    [_updateWallet]
+  )
+  const updateWallet = useCallback(
+    (accounts: string[]) => _updateWallet(accounts),
+    [_updateWallet]
+  )
+
   useEffect(() => {
     const getProvider = async () => {
-      let provider: any | null
-      try {
-        clearError()
-        const provider = await detectEthereumProvider()
-        setHasProvider(Boolean(provider))
-      } catch (err: any) {
-        setErrorMessage(err.message)
-      }
+      const provider = await detectEthereumProvider()
+      setHasProvider(Boolean(provider))
 
       if (provider) {
-        _updateWallet()
-        window.ethereum.on('accountsChanged', _updateWallet(provider))
-        window.ethereum.on('chainChanged', _updateWallet)
+        updateWalletAndAccounts()
+        window.ethereum.on('accountsChanged', (accounts: string[]) =>
+          _updateWallet(accounts)
+        )
+        window.ethereum.on('chainChanged', () => _updateWallet())
       }
     }
     getProvider()
     return () => {
-      window.ethereum?.removeListener('accountsChanged', _updateWallet)
-      window.ethereum?.removeListener('chainChanged', _updateWallet)
+      window.ethereum?.removeListener('accountsChanged', updateWallet)
+      window.ethereum?.removeListener('chainChanged', updateWalletAndAccounts)
     }
-  }, [_updateWallet])
+  }, [updateWallet, updateWalletAndAccounts])
 
   const connectMetaMask = async () => {
     setIsConnecting(true)
@@ -167,21 +164,11 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
 
   const submitSurvey = async (answers: answers) => {
     const { surveyID, answerIds } = answers
-    let contract: any
-    const web3 = getWeb3()
-    if (web3) {
-      contract = new web3.eth.Contract(abi, quizContractAddress)
-    } else {
-      contract = null
-    }
-
     try {
-      const contractSubmit = contract?.methods.submit(surveyID, answerIds)
-      clearError()
-      await contractSubmit.send({
-        from: wallet.accounts[0],
-        gas: '2000000',
-      })
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      const signer = await provider.getSigner()
+      const contract = new ethers.Contract(quizContractAddress, abi, signer)
+      await contract.submit(surveyID, answerIds)
     } catch (error: any) {
       setErrorMessage(error.message)
     }

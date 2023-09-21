@@ -63,10 +63,8 @@ export const Display = () => {
       <LogIn signed={signed} hasProvider={hasProvider} />
 
       {signedAndGoerly ? (
-        <Box>
-          <Box className={styles.balanceContainer}>
-            <Survey surveyData={surveyData} submitSurvey={submitSurvey} />
-          </Box>
+        <Box className={styles.balanceContainer}>
+          <Survey surveyData={surveyData} submitSurvey={submitSurvey} />
         </Box>
       ) : (
         <ChangeNetwork
