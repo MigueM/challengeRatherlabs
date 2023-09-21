@@ -34,16 +34,23 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       setWallet(disconnectedState)
       return
     }
-    const callObject = {
-      to: CONTRACT_ADDR,
-      data: ACCOUNT_PREFIX + accounts[0].slice(2),
-    }
-    const balance = formatBalance(
-      await window.ethereum.request({
+
+    let balance = ''
+    try {
+      clearError()
+      const callObject = {
+        to: CONTRACT_ADDR,
+        data: ACCOUNT_PREFIX + accounts[0].slice(2),
+      }
+      const call = await window.ethereum.request({
         method: 'eth_call',
         params: [callObject, 'latest'],
       })
-    )
+      balance = formatBalance(call)
+    } catch (err: any) {
+      setErrorMessage(err.message)
+    }
+
     let chainId = ''
     try {
       clearError()
