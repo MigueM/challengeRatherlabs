@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Box, Button } from '@mui/material'
 import styles from './survey.module.css'
 import Question from './Question'
-import Results from './Results'
+import Results, { answers } from './Results'
 
 export interface selectedOption {
   index: number
@@ -30,7 +30,7 @@ export interface surveyData {
 
 interface SurveyProps {
   surveyData: surveyData
-  submitSurvey: ({}) => void
+  submitSurvey: (answers: answers) => void
 }
 const Survey = ({ surveyData, submitSurvey }: SurveyProps) => {
   const questions = surveyData.questions
