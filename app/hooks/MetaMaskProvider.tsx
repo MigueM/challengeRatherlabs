@@ -89,19 +89,17 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     setWallet({ accounts, balance, chainId })
   }, [])
 
-  const updateWalletAndAccounts = useCallback(
-    () => _updateWallet(),
-    [_updateWallet]
-  )
-  const updateWallet = useCallback(
-    (accounts: string[]) => _updateWallet(accounts),
-    [_updateWallet]
-  )
-
+  /*   const updateWallet = async (accounts?: string[]) => {
+    try {
+      await _updateWallet(accounts)
+    } catch (err: any) {
+      setErrorMessage(err.message)
+    }
+  }
+ */
   useEffect(() => {
     const getProvider = async () => {
       let provider: any | null
-
       try {
         clearError()
         const provider = await detectEthereumProvider()
@@ -111,17 +109,17 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       }
 
       if (provider) {
-        updateWalletAndAccounts()
-        window.ethereum.on('accountsChanged', _updateWallet())
-        window.ethereum.on('chainChanged', updateWalletAndAccounts)
+        _updateWallet()
+        window.ethereum.on('accountsChanged', _updateWallet(provider))
+        window.ethereum.on('chainChanged', _updateWallet)
       }
     }
     getProvider()
     return () => {
-      window.ethereum?.removeListener('accountsChanged', updateWallet)
-      window.ethereum?.removeListener('chainChanged', updateWalletAndAccounts)
+      window.ethereum?.removeListener('accountsChanged', _updateWallet)
+      window.ethereum?.removeListener('chainChanged', _updateWallet)
     }
-  }, [updateWallet, updateWalletAndAccounts])
+  }, [_updateWallet])
 
   const connectMetaMask = async () => {
     setIsConnecting(true)
@@ -130,7 +128,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts',
       })
-      updateWallet(accounts)
+      _updateWallet(accounts)
     } catch (err: any) {
       setErrorMessage(err.message)
     }
