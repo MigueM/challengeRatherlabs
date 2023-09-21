@@ -1,0 +1,21 @@
+.metaMaskError {
+  height: 36px;
+  padding: 16px;
+  color: #efefef;
+  align-items: center;
+  background-color: transparent;
+}
+.errorMessageContainer {
+  display: flex;
+  max-height: 3em;
+}
+.errorMessage {
+  width: 90vw;
+  display: block;
+  white-space: nowrap;
+  overflow-y: auto;
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+  height: 3em;
+  text-align: center;
+}

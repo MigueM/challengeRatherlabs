@@ -1,0 +1,7 @@
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5em;
+  min-width: 100vw;
+  height: calc(100vh - 5em);
+}
