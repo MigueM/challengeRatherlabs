@@ -87,7 +87,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
     [_updateWallet]
   )
   const updateWallet = useCallback(
-    (accounts: string[]) => _updateWallet(accounts),
+    (accounts: any) => _updateWallet(accounts),
     [_updateWallet]
   )
 
@@ -98,11 +98,8 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
 
       if (provider) {
         updateWalletAndAccounts()
-
-        window.ethereum.on('accountsChanged', (accounts: string[]) =>
-          _updateWallet(accounts)
-        )
-        window.ethereum.on('chainChanged', () => _updateWallet())
+        window.ethereum.on('accountsChanged', updateWallet)
+        window.ethereum.on('chainChanged', updateWalletAndAccounts)
       }
     }
     getProvider()
@@ -110,22 +107,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       window.ethereum?.removeListener('accountsChanged', updateWallet)
       window.ethereum?.removeListener('chainChanged', updateWalletAndAccounts)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateWallet, updateWalletAndAccounts])
-
-  const connectMetaMask = async () => {
-    setIsConnecting(true)
-    try {
-      clearError()
-      const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts',
-      })
-      _updateWallet(accounts)
-    } catch (err: any) {
-      setErrorMessage(err.message)
-    }
-    setIsConnecting(false)
-  }
 
   const changeToGoerlyNetwork = async () => {
     if (window.ethereum) {
